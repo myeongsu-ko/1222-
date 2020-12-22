@@ -4,10 +4,11 @@ function App() {
   const [todoList, setTodoList] = useState([]); //usestate 를 사용하면 component에 상택값을 추가시킬 수 있다. 빈 배열 초기값으로 둠
   const [currentId, setCurrentId] = useState(1);
   const [desc, setDesc] = useState('');
+  const [showOdd, setShowOdd] = useState(false);
   function onAdd(){
     const todo = {id: currentId, desc};
     setCurrentId(currentId+1);
-    setTodoList([...todoList, todo])
+    setTodoList([...todoList, todo]) // 기존의 투두리스트에다 todo 추가 
   }
   //전개 연산자
   //const arr = [1,2,3];
@@ -26,7 +27,9 @@ function App() {
     <div>
         <h3>할일목록</h3>
         <ul>
-          {todoList.map(todo =>(
+          {todoList
+          .filter((_ ,index) => (showOdd ? index%2 === 0 : true))  
+          .map(todo =>(
             <li key={todo.id}>
               <span>{todo.desc}</span>
               <button data-id={todo.id} onClick={onDelete}>삭제</button>
@@ -35,6 +38,7 @@ function App() {
         </ul>
         <input type="text" value={desc} onChange={e => setDesc(e.target.value)}/>
         <button onClick={onAdd}>추가</button>
+        <button onClick={()=>setShowOdd(!showOdd)}>홀수 아이템만 보기 on/off</button> 
         <button onClick={onSaveToServer}>서버에 저장</button>
     </div>
   );
